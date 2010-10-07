@@ -84,8 +84,18 @@ namespace Spark.Compiler
                     continue;
                 }
 
-                if (string.IsNullOrEmpty(location) == false)
-                    compilerParameters.ReferencedAssemblies.Add(location);
+                bool assemblyAlreadyReferenced = false;
+                string currentAssembly = Path.GetFileName(location);
+                foreach (string alreadyAddedAssembly in compilerParameters.ReferencedAssemblies)
+                {
+                   if (currentAssembly == Path.GetFileName(alreadyAddedAssembly))
+                      assemblyAlreadyReferenced = true;
+                }
+
+                if (string.IsNullOrEmpty(location) == false && !assemblyAlreadyReferenced)
+                {
+                  compilerParameters.ReferencedAssemblies.Add( location );
+                }
             }
 
             CompilerResults compilerResults;
